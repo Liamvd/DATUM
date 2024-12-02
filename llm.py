@@ -1,6 +1,7 @@
 import pandas as pd
 import google.generativeai as genai
 import xml.etree.ElementTree as ET
+from rdflib import Graph, URIRef, Literal, Namespace
 import os
 
 
@@ -25,40 +26,61 @@ def getSource():
     return source
 
 
-# Create prompt request and return metadata in xml format
+# Create prompt request and return metadata
 def promptRequest(df_ontologies, model, source):
     prompt = 'Read the source: ' + source + ' And read the list of ontologies in this dataframe: ' + str(
         df_ontologies.parse('All')[
             'Ontology Concept']) + 'Decide to which ontology the source fits best and remember the row number of that ' \
-                                   'ontology. Check the row number corresponding to that number in the following ' \
+                                   'ontology. Check the row corresponding to that number in the following ' \
                                    'dataframe: ' + str(
         df_ontologies.parse('All')[
             'Properties']) + 'For each property in that row, create a property value based on the source. If nothing ' \
                              'relevant can be found in the source, leave the property blank. Your answer should only ' \
-                             'consist of the following structure: Ontology concept, Property name 1: Property value ' \
-                             '1, Property name 2: Property value 2, etc '
+                             'consist of the following structure: ontology concept, property name 1: property value ' \
+                             '1, property name 2: property value 2, etc. As an example: Civilian Victims, age: 20, ' \
+                             'gender: female, incident: physical assault, location: Khartoum'
     response = model.generate_content(prompt)
     return response.text
 
 
-# Put the results from the LLM in the proper format to export
+# Put the results from the LLM in the proper format to export (currently dictionary and xml)
 def parseMetadata(df_ontologies, results):
     parsed_results = {}
     results_list = results.split(',')
     count = 0
+    g = Graph()
+    BASE = Namespace('http://example.org/ontology/')
     for i in results_list:
         if count == 0:
             for sheet_name in df_ontologies.sheet_names[1:]:
                 df_sheet = df_ontologies.parse(sheet_name)
                 if i in df_sheet['Ontology Concept'].values:
+                    # configure dictionary output
                     parsed_results['Category'] = sheet_name
                     parsed_results['Ontology'] = i
+
+                    # configure xml output
+                    root = ET.Element(i)
+
+                    # configure rdf output
+                    category = BASE[sheet_name.replace(" ", "_")]
+                    ontology = BASE[i.replace(" ", "_")]
+                    g.add((ontology, BASE['hasCategory'], category))
                     break
         else:
             i_split = i.split(':')
+            # configure dictionary output
             parsed_results[i_split[0].strip()] = i_split[1].strip()
+
+            # configure xml output
+            child = ET.SubElement(root, 'property', attrib={i_split[0].strip(): i_split[1].strip()})
+
+            # configure rdf output
+            property = BASE[i_split[0].strip().replace(" ", "_")]
+            g.add((ontology, BASE["hasProperty"], property))
+            g.add((ontology, BASE["hasValue"], Literal(i_split[1].strip())))
         count += 1
-    return parsed_results
+    return parsed_results, root, g
 
 
 ontologies = readOntologies('Ontologies.xlsx')
@@ -67,14 +89,16 @@ dataSource = getSource()
 print('Source: ' + dataSource)
 metadata = promptRequest(ontologies, aiModel, dataSource)
 print('Output by LLM: ' + metadata)
-parsed_metadata = parseMetadata(ontologies, metadata)
+parsed_metadata, data_xml, data_rdf = parseMetadata(ontologies, metadata)
 print('Final output: ')
 print(parsed_metadata)
 
-# TO DO: save output to appropriate format, or make cedar integration
 # Save metadata as xml file; placeholder until automatic cedar integration
-# """
-# tree = ET.ElementTree(metadata.text)
-# with open('metadata.xml', 'wb') as file:
-#    tree.write(file, encoding='utf-8', xml_declaration=True)
-# """
+tree = ET.ElementTree(data_xml)
+with open(r'output/metadata.xml', 'wb') as file:
+    tree.write(file, encoding='utf-8', xml_declaration=True)
+
+# Save metadata as rdf file; can be directly imported into ALlegroGraph
+output_file = r'output/metadata.rdf'
+data_rdf.serialize(destination=output_file, format='xml')
+#print(g.serialize(format="turtle").decode("utf-8"))
