@@ -3,14 +3,8 @@
    xmlns:ns1="http://example.org/ontology/"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 >
-  <rdf:Description rdf:about="http://example.org/ontology/Aid_has_run_out">
-    <ns1:hasValue>false</ns1:hasValue>
-  </rdf:Description>
   <rdf:Description rdf:about="http://example.org/ontology/Reports_of_rape_of_Tigray_women">
-    <ns1:hasProperty rdf:resource="http://example.org/ontology/Date"/>
-    <ns1:hasProperty rdf:resource="http://example.org/ontology/Country"/>
-    <ns1:hasProperty rdf:resource="http://example.org/ontology/Region"/>
-    <ns1:hasProperty rdf:resource="http://example.org/ontology/Sexual_abuse"/>
+    <ns1:hasProperty rdf:resource="http://example.org/ontology/Eating_leaves/_seeds"/>
     <ns1:hasProperty rdf:resource="http://example.org/ontology/Climate_change/_natural_disaster"/>
     <ns1:hasProperty rdf:resource="http://example.org/ontology/Livestock_death"/>
     <ns1:hasProperty rdf:resource="http://example.org/ontology/Looting"/>
@@ -30,8 +24,7 @@
     <ns1:hasProperty rdf:resource="http://example.org/ontology/Denial_of_starvation_(as_weapon_of_war)"/>
     <ns1:hasProperty rdf:resource="http://example.org/ontology/(Potential)_famine"/>
     <ns1:hasProperty rdf:resource="http://example.org/ontology/Inaction_for_international_actors"/>
-    <ns1:hasProperty rdf:resource="http://example.org/ontology/Deliberate_Famine"/>
-    <ns1:hasProperty rdf:resource="http://example.org/ontology/Destruction_of_the_Health_System"/>
+    <ns1:hasProperty rdf:resource="http://example.org/ontology/Occupied_by_armed_groups"/>
     <ns1:hasProperty rdf:resource="http://example.org/ontology/Medical_supplies_cannot_reach"/>
     <ns1:hasProperty rdf:resource="http://example.org/ontology/Transport_of_patients"/>
     <ns1:hasProperty rdf:resource="http://example.org/ontology/Looting/_raiding"/>
@@ -41,101 +34,91 @@
     <ns1:hasProperty rdf:resource="http://example.org/ontology/Internet"/>
     <ns1:hasProperty rdf:resource="http://example.org/ontology/Vaccines"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/ontology/Inaction_for_international_actors">
-    <ns1:hasValue>false }</ns1:hasValue>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/ontology/Destruction_of_the_Health_System">
-    <ns1:hasValue>{ Occupied by armed groups</ns1:hasValue>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/ontology/Fuel_shortage">
-    <ns1:hasValue>false</ns1:hasValue>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/ontology/Slaughtering/_stealing_of_animals">
-    <ns1:hasValue>false</ns1:hasValue>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/ontology/Destruction_of_agriculture">
-    <ns1:hasValue>false</ns1:hasValue>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/ontology/Deliberate_Famine">
-    <ns1:hasValue>{ Eating leaves/ seeds</ns1:hasValue>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/ontology/Livestock_death">
-    <ns1:hasValue>false</ns1:hasValue>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/ontology/Weapon_of_war">
-    <ns1:hasValue>true</ns1:hasValue>
-    <ns1:hasValue>false</ns1:hasValue>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/ontology/Region">
-    <ns1:hasValue>Tigray</ns1:hasValue>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/ontology/Country">
-    <ns1:hasValue>Ethiopia</ns1:hasValue>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/ontology/Deliberate_starvation">
-    <ns1:hasValue>false</ns1:hasValue>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/ontology/Climate_change/_natural_disaster">
-    <ns1:hasValue>false</ns1:hasValue>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/ontology/Date">
-    <ns1:hasValue></ns1:hasValue>
-  </rdf:Description>
   <rdf:Description rdf:about="http://example.org/ontology/Aid_unable_to_reach/_blocking_of_aid">
-    <ns1:hasValue>false</ns1:hasValue>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/ontology/Looting">
-    <ns1:hasValue>false</ns1:hasValue>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/ontology/Death_from_starvation">
-    <ns1:hasValue>false</ns1:hasValue>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/ontology/Water_shortage">
-    <ns1:hasValue>false</ns1:hasValue>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/ontology/Preventing_farming">
-    <ns1:hasValue>false</ns1:hasValue>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/ontology/Dismantling_of_the_economic_and_food_system">
-    <ns1:hasValue>false</ns1:hasValue>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/ontology/Sexual_abuse">
-    <ns1:hasValue>{ Eating leaves/ seeds</ns1:hasValue>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/ontology/Diversion_of_aid">
-    <ns1:hasValue>false</ns1:hasValue>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/ontology/Medical_supplies_cannot_reach">
-    <ns1:hasValue>false</ns1:hasValue>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/ontology/Looting/_raiding">
-    <ns1:hasValue>false</ns1:hasValue>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/ontology/Bad_harvest/_crops_inaccessible">
-    <ns1:hasValue>false</ns1:hasValue>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/ontology/Transport_of_patients">
-    <ns1:hasValue>false</ns1:hasValue>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/ontology/Internet">
-    <ns1:hasValue>false</ns1:hasValue>
+    <ns1:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</ns1:hasValue>
   </rdf:Description>
   <rdf:Description rdf:about="http://example.org/ontology/Denial_of_starvation_(as_weapon_of_war)">
-    <ns1:hasValue>false</ns1:hasValue>
+    <ns1:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</ns1:hasValue>
   </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/ontology/Humanitarian_aid">
-    <ns1:hasValue>false</ns1:hasValue>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/ontology/Vaccines">
-    <ns1:hasValue>false }</ns1:hasValue>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://example.org/ontology/Paying_for_health_care">
-    <ns1:hasValue>false</ns1:hasValue>
+  <rdf:Description rdf:about="http://example.org/ontology/Internet">
+    <ns1:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</ns1:hasValue>
   </rdf:Description>
   <rdf:Description rdf:about="http://example.org/ontology/(Potential)_famine">
-    <ns1:hasValue>false</ns1:hasValue>
+    <ns1:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</ns1:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/ontology/Eating_leaves/_seeds">
+    <ns1:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</ns1:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/ontology/Dismantling_of_the_economic_and_food_system">
+    <ns1:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</ns1:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/ontology/Water_shortage">
+    <ns1:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</ns1:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/ontology/Weapon_of_war">
+    <ns1:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</ns1:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/ontology/Paying_for_health_care">
+    <ns1:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</ns1:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/ontology/Occupied_by_armed_groups">
+    <ns1:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</ns1:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/ontology/Diversion_of_aid">
+    <ns1:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</ns1:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/ontology/Looting">
+    <ns1:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</ns1:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/ontology/Medical_supplies_cannot_reach">
+    <ns1:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</ns1:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/ontology/Transport_of_patients">
+    <ns1:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</ns1:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/ontology/Climate_change/_natural_disaster">
+    <ns1:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</ns1:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/ontology/Inaction_for_international_actors">
+    <ns1:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</ns1:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/ontology/Preventing_farming">
+    <ns1:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</ns1:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/ontology/Livestock_death">
+    <ns1:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</ns1:hasValue>
   </rdf:Description>
   <rdf:Description rdf:about="http://example.org/ontology/Occupation_of_water_sources">
-    <ns1:hasValue>false</ns1:hasValue>
+    <ns1:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</ns1:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/ontology/Humanitarian_aid">
+    <ns1:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</ns1:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/ontology/Deliberate_starvation">
+    <ns1:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</ns1:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/ontology/Death_from_starvation">
+    <ns1:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</ns1:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/ontology/Vaccines">
+    <ns1:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</ns1:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/ontology/Looting/_raiding">
+    <ns1:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</ns1:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/ontology/Aid_has_run_out">
+    <ns1:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</ns1:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/ontology/Fuel_shortage">
+    <ns1:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</ns1:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/ontology/Destruction_of_agriculture">
+    <ns1:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</ns1:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/ontology/Slaughtering/_stealing_of_animals">
+    <ns1:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</ns1:hasValue>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/ontology/Bad_harvest/_crops_inaccessible">
+    <ns1:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</ns1:hasValue>
   </rdf:Description>
 </rdf:RDF>
