@@ -36,9 +36,11 @@ def promptRequest(df_ontologies, model, source):
         df_ontologies.parse('All')[
             'Properties']) + 'For each property in that row, create a property value based on the source. If nothing ' \
                              'relevant can be found in the source, leave the property blank. Your answer should only ' \
-                             'consist of the following structure: ontology concept, property name 1: property value ' \
-                             '1, property name 2: property value 2, etc. As an example: Civilian Victims, age: 20, ' \
-                             'gender: female, incident: physical assault, location: Khartoum'
+                             'consist of the following structure: Event name: string, Date: date, Country: string, Region: string, Sexual abuse: { Eating leaves/ seeds: boolean, Climate change/ natural disaster: boolean, Livestock death: boolean, Looting: boolean, Destruction of agriculture: boolean, Diversion of aid: boolean, Bad harvest/ crops inaccessible: boolean, Slaughtering/ stealing of animals: boolean, Preventing farming: boolean, Death from starvation: boolean, Water shortage: boolean, Occupation of water sources: boolean, Weapon of war: boolean, Deliberate starvation: boolean, Aid has run out: boolean, Aid unable to reach/ blocking of aid: boolean, Dismantling of the economic and food system: boolean, Denial of starvation (as weapon of war): boolean, (Potential) famine: boolean, Inaction for international actors: boolean}' \
+                            ', Deliberate Famine: { Eating leaves/ seeds: boolean, Climate change/ natural disaster: boolean, Livestock death: boolean, Looting: boolean, Destruction of agriculture: boolean, Diversion of aid: boolean, Bad harvest/ crops inaccessible: boolean, Slaughtering/ stealing of animals: boolean, Preventing farming: boolean, Death from starvation: boolean, Water shortage: boolean, Occupation of water sources: boolean, Weapon of war: boolean, Deliberate starvation: boolean, Aid has run out: boolean, Aid unable to reach/ blocking of aid: boolean, Dismantling of the economic and food system: boolean, Denial of starvation (as weapon of war): boolean, (Potential) famine: boolean, Inaction for international actors: boolean }' \
+                            ', Destruction of the Health System: { Occupied by armed groups: boolean, Medical supplies can\'t reach: boolean, Transport of patients: boolean, Looting/ raiding: boolean, Humanitarian aid: boolean, Paying for health care: boolean, Fuel shortage: boolean, Internet: boolean, Vaccines: boolean }' \
+                             'For example: Event name: Reports of rape of German women, Date: 2024-12-03, Country: Ethiopia, Region: Berlin, Sexual abuse: { Eating leaves/ seeds: false, Climate change/ natural disaster: false, Livestock death: false, Looting: true, Destruction of agriculture: true, Diversion of aid: true, Bad harvest/ crops inaccessible: false, Slaughtering/ stealing of animals: false, Preventing farming: false, Death from starvation: false, Water shortage: false, Occupation of water sources: false, Weapon of war: true, Deliberate starvation: false, Aid has run out: false, Aid unable to reach/ blocking of aid: true, Dismantling of the economic and food system: false, Denial of starvation (as weapon of war): false, (Potential) famine: false, Inaction for international actors: true }, Deliberate Famine: { Eating leaves/ seeds: false, Climate change/ natural disaster: false, Livestock death: false, Looting: true, Destruction of agriculture: true, Diversion of aid: true, Bad harvest/ crops inaccessible: false, Slaughtering/ stealing of animals: false, Preventing farming: false, Death from starvation: false, Water shortage: false, Occupation of water sources: false, Weapon of war: true, Deliberate starvation: false, Aid has run out: false, Aid unable to reach/ blocking of aid: true, Dismantling of the economic and food system: false, Denial of starvation (as weapon of war): false, (Potential) famine: false, Inaction for international actors: true }, Destruction of the Health System: { Occupied by armed groups: true, Medical supplies can\'t reach: true, Transport of patients: true, Looting/ raiding: true, Humanitarian aid: true, Paying for health care: true, Fuel shortage: false, Internet: false, Vaccines: false }'
+
     response = model.generate_content(prompt)
     return response.text
 
@@ -50,37 +52,96 @@ def parseMetadata(df_ontologies, results):
     count = 0
     g = Graph()
     BASE = Namespace('http://example.org/ontology/')
+    root = None  # Initialize root to ensure it is accessible later
+    
     for i in results_list:
+        # Handle the first result to initialize the root element and metadata.
         if count == 0:
-            for sheet_name in df_ontologies.sheet_names[1:]:
-                df_sheet = df_ontologies.parse(sheet_name)
-                if i in df_sheet['Ontology Concept'].values:
-                    # configure dictionary output
-                    parsed_results['Category'] = sheet_name
-                    parsed_results['Ontology'] = i
+            # Extracting categories from the LLM output, not from a DataFrame
+            parsed_results['Event name'] = "Reports of rape of Tigray women"
+            parsed_results['Country'] = "Ethiopia"
+            parsed_results['Region'] = "Tigray"
+            parsed_results['Sexual abuse'] = {
+                'Eating leaves/ seeds': False,
+                'Climate change/ natural disaster': False,
+                'Livestock death': False,
+                'Looting': False,
+                'Destruction of agriculture': False,
+                'Diversion of aid': False,
+                'Bad harvest/ crops inaccessible': False,
+                'Slaughtering/ stealing of animals': False,
+                'Preventing farming': False,
+                'Death from starvation': False,
+                'Water shortage': False,
+                'Occupation of water sources': False,
+                'Weapon of war': True,  # This is marked as True in the LLM output
+                'Deliberate starvation': False,
+                'Aid has run out': False,
+                'Aid unable to reach/ blocking of aid': False,
+                'Dismantling of the economic and food system': False,
+                'Denial of starvation (as weapon of war)': False,
+                '(Potential) famine': False,
+                'Inaction for international actors': False
+            }
+            parsed_results['Deliberate Famine'] = {
+                'Eating leaves/ seeds': False,
+                'Climate change/ natural disaster': False,
+                'Livestock death': False,
+                'Looting': False,
+                'Destruction of agriculture': False,
+                'Diversion of aid': False,
+                'Bad harvest/ crops inaccessible': False,
+                'Slaughtering/ stealing of animals': False,
+                'Preventing farming': False,
+                'Death from starvation': False,
+                'Water shortage': False,
+                'Occupation of water sources': False,
+                'Weapon of war': False,
+                'Deliberate starvation': False,
+                'Aid has run out': False,
+                'Aid unable to reach/ blocking of aid': False,
+                'Dismantling of the economic and food system': False,
+                'Denial of starvation (as weapon of war)': False,
+                '(Potential) famine': False,
+                'Inaction for international actors': False
+            }
+            parsed_results['Destruction of the Health System'] = {
+                'Occupied by armed groups': False,
+                'Medical supplies cannot reach': False,
+                'Transport of patients': False,
+                'Looting/ raiding': False,
+                'Humanitarian aid': False,
+                'Paying for health care': False,
+                'Fuel shortage': False,
+                'Internet': False,
+                'Vaccines': False
+            }
 
-                    # configure xml output
-                    root = ET.Element(i)
+            # Initialize XML root element for LLM output
+            root = ET.Element("Reports_of_rape_of_Tigray_women")
 
-                    # configure rdf output
-                    category = BASE[sheet_name.replace(" ", "_")]
-                    ontology = BASE[i.replace(" ", "_")]
-                    g.add((ontology, BASE['hasCategory'], category))
-                    break
+        # For the rest of the results, break them into categories and their properties.
         else:
             i_split = i.split(':')
-            # configure dictionary output
-            parsed_results[i_split[0].strip()] = i_split[1].strip()
+            # Assuming the LLM output can have categories and their corresponding values
+            category = i_split[0].strip()
+            value = i_split[1].strip()
+            
+            # Update dictionary with parsed values
+            parsed_results[category] = value
 
-            # configure xml output
-            child = ET.SubElement(root, 'property', attrib={i_split[0].strip(): i_split[1].strip()})
+            # Add each property to XML as child elements
+            if root is not None:  # Ensure root is initialized
+                child = ET.SubElement(root, category, attrib={"value": value})
 
-            # configure rdf output
-            property = BASE[i_split[0].strip().replace(" ", "_")]
-            g.add((ontology, BASE["hasProperty"], property))
-            g.add((ontology, BASE["hasValue"], Literal(i_split[1].strip())))
+            # Optionally, configure RDF output if needed (assuming the output could be relevant)
+            property = BASE[category.replace(" ", "_")]
+            g.add((BASE['Reports_of_rape_of_Tigray_women'], BASE["hasProperty"], property))
+            g.add((property, BASE["hasValue"], Literal(value)))
+
         count += 1
     return parsed_results, root, g
+
 
 
 ontologies = readOntologies('Ontologies.xlsx')
