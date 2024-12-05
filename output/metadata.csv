@@ -1,0 +1,53 @@
+Property,Value
+Event name,Reports of rape of Tigray women
+Date,10-12-2024
+Country,Ethiopia
+Region,Tigray
+"""Eating leaves/ seeds""",False
+"""Climate change/ natural disaster""",False
+"""Livestock death""",False
+"""Looting""",False
+"""Destruction of agriculture""",False
+"""Diversion of aid""",False
+"""Bad harvest/ crops inaccessible""",False
+"""Slaughtering/ stealing of animals""",False
+"""Preventing farming""",False
+"""Death from starvation""",False
+"""Water shortage""",False
+"""Occupation of water sources""",False
+"""Weapon of war""",False
+"""Deliberate starvation""",False
+"""Aid has run out""",False
+"""Aid unable to reach/ blocking of aid""",False
+"""Dismantling of the economic and food system""",False
+"""Denial of starvation (as weapon of war)""",False
+"""(Potential) famine""",False
+"""Inaction for international actors""",False
+"""civilian victims""",True
+"""Abduction""",False
+"""incommunicado""",False
+"""forcing relatives to commit incest""",False
+"""forcing to have sex in exchange for basic commodities""",False
+"""Forced to watch""",False
+"""arbitrary execution & killing""",False
+"""gang rape""",True
+"""rape""",True
+"""physical abuse""",False
+"""sexual abuse""",True
+"""Sexual slavery""",False
+"""Human trafficking""",False
+"""Cruelty""",False
+"""Threatened to not report""",False
+"""Victims want to abort/ unwanted pregnancies""",False
+"""Needed/ received treatment""",False
+"""Fear of stigma""",False
+"""(Potential) famine""",False
+"""War crime/ weapon of war""",True
+"""Occupied by armed groups""",False
+"""Medical supplies cannot reach""",False
+"""Transport of patients""",False
+"""Looting/ raiding""",False
+"""Humanitarian aid""",False
+"""Paying for health care""",False
+"""Fuel shortage""",False
+"""Internet""",False
