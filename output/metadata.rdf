@@ -4,10 +4,13 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 >
   <rdf:Description rdf:about="http://example.org/ontology/Reports_of_rape_of_Tigray_women">
-    <ns1:relatesTo rdf:resource='http://example.org/ontology/"civilian_victims"'/>
-    <ns1:relatesTo rdf:resource='http://example.org/ontology/"gang_rape"'/>
-    <ns1:relatesTo rdf:resource='http://example.org/ontology/"rape"'/>
-    <ns1:relatesTo rdf:resource='http://example.org/ontology/"sexual_abuse"'/>
-    <ns1:relatesTo rdf:resource='http://example.org/ontology/"War_crime/_weapon_of_war"'/>
+    <ns1:date>10-12-2024</ns1:date>
+    <ns1:country>Ethiopia</ns1:country>
+    <ns1:region>Tigray</ns1:region>
+    <ns1:relatesTo rdf:resource='http://example.org/ontology/"Weapon_of_war"'/>
+    <ns1:relatesTo rdf:resource='http://example.org/ontology/"Civilian_victims"'/>
+    <ns1:relatesTo rdf:resource='http://example.org/ontology/"Gang_rape"'/>
+    <ns1:relatesTo rdf:resource='http://example.org/ontology/"Rape"'/>
+    <ns1:relatesTo rdf:resource='http://example.org/ontology/"Sexual_abuse"'/>
   </rdf:Description>
 </rdf:RDF>

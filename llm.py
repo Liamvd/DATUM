@@ -94,6 +94,11 @@ def parseMetadata(df_ontologies, results):
             # Initialize the XML root
             root = ET.Element("Reports_of_rape_of_Tigray_women")
 
+            # Add basic metadata to RDF
+            g.add((BASE['Reports_of_rape_of_Tigray_women'], BASE["date"], Literal(parsed_results['Date'])))
+            g.add((BASE['Reports_of_rape_of_Tigray_women'], BASE["country"], Literal(parsed_results['Country'])))
+            g.add((BASE['Reports_of_rape_of_Tigray_women'], BASE["region"], Literal(parsed_results['Region'])))
+
         # Parsing the properties under each category (like Sexual abuse, Deliberate Famine)
         else:
             i_split = i.split(':')
