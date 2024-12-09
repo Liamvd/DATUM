@@ -19,9 +19,7 @@ def readOntologies(ontology_file):
 
 # Configure ai api and model
 def configureAi():
-    # For real implementation: remove hardcoded key and set as environment variable
-    # genai.configure(api_key=os.environ["API_KEY"])
-    genai.configure(api_key='AIzaSyAFKsWfhHpgjN-kVclJo5rUC6X8f5StoSo')
+    genai.configure(api_key=os.environ["API_KEY"])
     model = genai.GenerativeModel('gemini-1.5-flash')
     return model
 
@@ -35,30 +33,27 @@ def getSource():
 # Create prompt request and return metadata
 def promptRequest(df_ontologies, model, source):
     prompt = 'Read the source: ' + source + ' And read the list of ontologies in this dataframe: ' + str(
-        df_ontologies.parse('All')[
-            'Ontology Concept']) + '' \
-                                   '' \
-                                   'dataframe: ' + str(
-        df_ontologies.parse('All')[
-            'Properties']) + 'Create a property value based on the source. If nothing ' \
-                             'relevant can be found in the source, leave the property blank. But with the booleans answer always false if not you do not know. Your answer should only. So classify the source based on our classifiers ' \
-                             'consist of the following structure: Event name: string, Date: date, Country: string, Region: string,' \
-                            'Eating leaves/ seeds: boolean, Climate change/ natural disaster: boolean, Livestock death: boolean, Looting: boolean, Destruction of agriculture: boolean, Diversion of aid: boolean, Bad harvest/ crops inaccessible: boolean, Slaughtering/ stealing of animals: boolean, Preventing farming: boolean, Death from starvation: boolean, Water shortage: boolean, Occupation of water sources: boolean, Weapon of war: boolean, Deliberate starvation: boolean, Aid has run out: boolean, Aid unable to reach/ blocking of aid: boolean, Dismantling of the economic and food system: boolean, Denial of starvation (as weapon of war): boolean, (Potential) famine: boolean, Inaction for international actors: boolean' \
-                             ', civilian victims: boolean, Abduction: boolean, incommunicado: boolean, forcing relatives to commit incest: boolean, forcing to have sex in exchange for basic commodities: boolean, Forced to watch: boolean, arbitrary execution & killing: boolean, gang rape: boolean, rape: boolean, physical abuse: boolean, sexual abuse: boolean, Sexual slavery: boolean, Human trafficking: boolean, Cruelty: boolean,Threatened to not report: boolean,Victims want to abort/ unwanted pregnancies: boolean, Needed/ received treatment: boolean, Fear of stigma: boolean, (Potential) famine: boolean, War crime/ weapon of war: boolean ' \
-                             ', Occupied by armed groups: boolean, Medical supplies cannot reach: boolean, Transport of patients: boolean, Looting/ raiding: boolean, Humanitarian aid: boolean, Paying for health care: boolean, Fuel shortage: boolean, Internet: boolean, Vaccines: boolean }' \
-                             'For example: Event name: Reports of rape of German women, Date: 2024-12-03, Country: Ethiopia, Region: Berlin, Eating leaves/ seeds: false, Climate change/ natural disaster: false, Livestock death: false, Looting: true, Destruction of agriculture: true, Diversion of aid: true, Bad harvest/ crops inaccessible: false, Slaughtering/ stealing of animals: false, Preventing farming: false, Death from starvation: false, Water shortage: false, Occupation of water sources: false, Weapon of war: true, Deliberate starvation: false, Aid has run out: false, Aid unable to reach/ blocking of aid: true, Dismantling of the economic and food system: false, Denial of starvation (as weapon of war): false, (Potential) famine: false, Inaction for international actors: true, Civilian victims: true, Abduction: true, Incommunicado: true, Forcing relatives to commit incest: false, Forcing to have sex in exchange for basic commodities: true, Forced to watch: true, Arbitrary execution & killing: true, Gang rape: true, Rape: true, Physical abuse: true, Sexual abuse: true, Sexual slavery: true, Human trafficking: true, Cruelty: true, Threatened to not report: true, Victims want to abort/ unwanted pregnancies: true, Needed/ received treatment: true, Fear of stigma: true, Occupied by armed groups: true, Medical supplies cannot reach: true,Transport of patients: true, Looting/ raiding: true, Humanitarian aid: true, Paying for health care: true, Fuel shortage: false, Internet: false, Vaccines: false '
+        df_ontologies.parse('All')['Ontology Concept']) + ' Choose the ontology that best fits the source. For ' \
+                                                          'each of the properties in the following list of ' \
+                                                          'properties, provide a true or false based on whether the ' \
+                                                          'source is related to that property: ' + str(
+        df_ontologies.parse('All')['Description']) + 'Your response should only consist of the following structure: ' \
+                                                     'Event name: Event name, Label name 1: True/False, Label name ' \
+                                                     '2: True/False, etc. For example: Event name: Reports of rape ' \
+                                                     'of German women, Civilian Victims: True, Adbuction: False, ' \
+                                                     'etc.'
 
     response = model.generate_content(prompt)
     return response.text
 
 
-def parseMetadata(df_ontologies, results):
+def parseMetadata(results):
     parsed_results = {}
     csv_list = []
     results_list = results.split(',')
     count = 0
     g = Graph()
-    BASE = Namespace('http://example.org/ontology/')
+    BASE = Namespace('http://example.org/ontology/') # Should be configured with own ontology usage
     root = None  # Initialize root to ensure it is accessible later
 
     # Clean up the results (to remove curly braces and split into properties)
@@ -99,7 +94,7 @@ def parseMetadata(df_ontologies, results):
             g.add((BASE['Reports_of_rape_of_Tigray_women'], BASE["country"], Literal(parsed_results['Country'])))
             g.add((BASE['Reports_of_rape_of_Tigray_women'], BASE["region"], Literal(parsed_results['Region'])))
 
-        # Parsing the properties under each category (like Sexual abuse, Deliberate Famine)
+        # Parsing the properties
         else:
             i_split = i.split(':')
             category = i_split[0].strip()
@@ -126,7 +121,7 @@ def parseMetadata(df_ontologies, results):
                     "Value": parsed_results[category]
                 })
 
-                # Optionally, configure RDF output if needed (assuming the output could be relevant)
+                # Configure RDF output
                 # For RDF, we treat the category as the property and value as the value of that property
                 clean_category_rdf = category.replace(" ", "_")
                 property = BASE[clean_category_rdf]
@@ -138,13 +133,13 @@ def parseMetadata(df_ontologies, results):
     return parsed_results, root, csv_list, g
 
 
-ontologies = readOntologies('Ontologies.xlsx')
+ontologies = readOntologies('sources/Ontologies.xlsx')
 aiModel = configureAi()
 dataSource = getSource()
 print('Source: ' + dataSource)
 metadata = promptRequest(ontologies, aiModel, dataSource)
 print('Output by LLM: ' + metadata)
-parsed_metadata, data_xml, data_csv, data_rdf = parseMetadata(ontologies, metadata)
+parsed_metadata, data_xml, data_csv, data_rdf = parseMetadata(metadata)
 print('Final output: ')
 print(parsed_metadata)
 
