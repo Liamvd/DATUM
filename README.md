@@ -21,3 +21,4 @@ The Fair Trauma Reporting tool aims to facilitate researchers by automating the 
    5. ag_repo: name of the repository in AllegroGraph to which the rdf needs to be sent
    
    The last 4 requirements are not needed if the user does not want to utilise the AllegroGraph connection
+3. Create a folder named 'output' in the root of the project (same level as python files), otherwise, no metadata can be exported

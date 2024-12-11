@@ -30,7 +30,6 @@ body, html {
     border-radius: 15px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
     padding: 30px;
-    max-width: 400px;
     width: 90%;
     animation: fadeIn 1.5s ease-in-out;
 }
@@ -51,18 +50,37 @@ body, html {
 
 /* Button styling */
 .action-button {
-    background: #2575fc;
+    background: linear-gradient(135deg, #2575fc, #6a11cb);
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 12px 25px;
     font-size: 1rem;
-    border-radius: 25px;
+    font-weight: bold;
+    border-radius: 30px;
     cursor: pointer;
-    transition: background 0.3s ease;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-transform: uppercase;
 }
 
 .action-button:hover {
-    background: #6a11cb;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+}
+
+.action-button:active {
+    background: linear-gradient(135deg, #0056b3, #3b5998);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transform: translateY(2px);
+}
+
+/* Button container */
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px; /* Space between buttons */
+    margin-top: 20px;
 }
 
 /* Fade-in animation */
@@ -78,14 +96,33 @@ body, html {
 }
 
 .flash-messages {
-    margin: 20px;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    width: 80%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none; /* Allow clicks to pass through */
 }
 
 .alert {
     padding: 15px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     border-radius: 5px;
     font-family: Arial, sans-serif;
+    text-align: center;
+    opacity: 0.95;
+    pointer-events: auto; /* Allow interaction with the message */
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
 }
 
 .alert-danger {
@@ -100,7 +137,30 @@ body, html {
     border: 1px solid #ffeeba;
 }
 
+/* Add fade-in/out animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 0.95;
+        transform: translateY(0);
+    }
+}
 
+@keyframes fadeOut {
+    from {
+        opacity: 0.95;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.flash-messages .alert {
+    animation: fadeIn 0.5s ease, fadeOut 0.5s ease 4.5s;
+}
     </style>
 
 </head>
