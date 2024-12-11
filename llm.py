@@ -2,8 +2,12 @@ import pandas as pd
 import google.generativeai as genai
 import xml.etree.ElementTree as ET
 from rdflib import Graph, Literal, Namespace
+from dotenv import load_dotenv
 import os
 import csv
+
+# Load environment variables
+load_dotenv()
 
 # Suppress TensorFlow logs
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
@@ -17,17 +21,11 @@ def readOntologies(ontology_file):
     return df_ontologies
 
 
-# Configure ai api and model
+# Configure AI API and model
 def configureAi():
-    genai.configure(api_key=os.environ["API_KEY"])
+    genai.configure(api_key=os.getenv("API_KEY", os.environ["API_KEY"]))
     model = genai.GenerativeModel('gemini-1.5-flash')
     return model
-
-
-# Get the source that will be scanned by the llm
-def getSource():
-    source = 'Reports of rape of Tigray women as part of the violence carried out on civilians in Tigray.'
-    return source
 
 
 # Create prompt request and return metadata
@@ -47,7 +45,8 @@ def promptRequest(df_ontologies, model, source):
     return response.text
 
 
-def parseMetadata(results):
+# Parse metadata gained from LLM into proper output formats
+def parseMetadata(results, data):
     parsed_results = {}
     csv_list = []
     results_list = results.split(',')
@@ -63,10 +62,10 @@ def parseMetadata(results):
         # Handle the first result to initialize the root element and metadata.
         if count == 0:
             # Initialize basic metadata (Event name, Country, Region, etc.)
-            parsed_results['Event name'] = "Reports of rape of Tigray women"
-            parsed_results['Date'] = '10-12-2024'
-            parsed_results['Country'] = "Ethiopia"
-            parsed_results['Region'] = "Tigray"
+            parsed_results['Event name'] = data['eventName']
+            parsed_results['Date'] = data['date']
+            parsed_results['Country'] = data['country']
+            parsed_results['Region'] = data['region']
 
             # Add basic metadata to CSV export
             csv_list.append({
@@ -87,12 +86,13 @@ def parseMetadata(results):
             })
 
             # Initialize the XML root
-            root = ET.Element("Reports_of_rape_of_Tigray_women")
+            en = data['eventName'].replace(" ", "_")
+            root = ET.Element(en)
 
             # Add basic metadata to RDF
-            g.add((BASE['Reports_of_rape_of_Tigray_women'], BASE["date"], Literal(parsed_results['Date'])))
-            g.add((BASE['Reports_of_rape_of_Tigray_women'], BASE["country"], Literal(parsed_results['Country'])))
-            g.add((BASE['Reports_of_rape_of_Tigray_women'], BASE["region"], Literal(parsed_results['Region'])))
+            g.add((BASE[en], BASE["date"], Literal(parsed_results['Date'])))
+            g.add((BASE[en], BASE["country"], Literal(parsed_results['Country'])))
+            g.add((BASE[en], BASE["region"], Literal(parsed_results['Region'])))
 
         # Parsing the properties
         else:
@@ -126,36 +126,44 @@ def parseMetadata(results):
                 clean_category_rdf = category.replace(" ", "_")
                 property = BASE[clean_category_rdf]
                 if parsed_results[category]:  # Only add to RDF if the value is True
-                    g.add((BASE['Reports_of_rape_of_Tigray_women'], BASE["relatesTo"], property))
+                    g.add((BASE[data['eventName'].replace(" ", "_")], BASE["relatesTo"], property))
 
         count += 1
 
     return parsed_results, root, csv_list, g
 
 
-ontologies = readOntologies('sources/Ontologies.xlsx')
-aiModel = configureAi()
-dataSource = getSource()
-print('Source: ' + dataSource)
-metadata = promptRequest(ontologies, aiModel, dataSource)
-print('Output by LLM: ' + metadata)
-parsed_metadata, data_xml, data_csv, data_rdf = parseMetadata(metadata)
-print('Final output: ')
-print(parsed_metadata)
+# Execute llm
+def run_llm(data):
+    ontologies = readOntologies('sources/Ontologies.xlsx')
+    aiModel = configureAi()
+    metadata = promptRequest(ontologies, aiModel, data['situation'])
+    parsed_metadata, data_xml, data_csv, data_rdf = parseMetadata(metadata, data)
+    return parsed_metadata, data_xml, data_csv, data_rdf
+
 
 # Save metadata as xml file; placeholder until automatic cedar integration
-tree = ET.ElementTree(data_xml)
-with open(r'output/metadata.xml', 'wb') as file:
-    tree.write(file, encoding='utf-8', xml_declaration=True)
+def export_xml(data_xml):
+    file_path = 'output/metadata.xml'
+    tree = ET.ElementTree(data_xml)
+    with open(file_path, 'wb') as file:
+        tree.write(file, encoding='utf-8', xml_declaration=True)
+    return file_path
+
 
 # Save metadata as csv file; human-readable output that can be used for manual insertion, showcasing or visualisation
-csv_headers = ['Property', 'Value']
-with open(r'output/metadata.csv', mode='w', newline='', encoding='utf-8') as csv_file:
-    writer = csv.DictWriter(csv_file, fieldnames=csv_headers)
-    writer.writeheader()
-    writer.writerows(data_csv)
+def export_csv(data_csv):
+    file_path = 'output/metadata.csv'
+    csv_headers = ['Property', 'Value']
+    with open(file_path, mode='w', newline='', encoding='utf-8') as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames=csv_headers)
+        writer.writeheader()
+        writer.writerows(data_csv)
+    return file_path
+
 
 # Save metadata as rdf file; can be directly imported into ALlegroGraph
-output_file = r'output/metadata.rdf'
-data_rdf.serialize(destination=output_file, format='xml')
-# print(g.serialize(format="turtle").decode("utf-8"))
+def export_rdf(data_rdf):
+    output_file = r'output/metadata.rdf'
+    data_rdf.serialize(destination=output_file, format='xml')
+    return output_file
