@@ -22,3 +22,4 @@ The Fair Trauma Reporting tool aims to facilitate researchers by automating the 
    
    The last 4 requirements are not needed if the user does not want to utilise the AllegroGraph connection
 3. Create a folder named 'output' in the root of the project (same level as python files), otherwise, no metadata can be exported
+4. Run app.py, open the web link and fill in the required information. If you use an url, put it in the 'situation' tab.
