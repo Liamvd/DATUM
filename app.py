@@ -41,6 +41,10 @@ def index():
         # Run LLM and collect results
         parsed_results, outputs['data_xml'], outputs['data_csv'], outputs['data_rdf'] = run_llm(data)
 
+        # Create session data
+        session['data'] = data
+        session['parsed_results'] = parsed_results
+
         # Render the result page
         return render_template(
             "result.html",
