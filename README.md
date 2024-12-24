@@ -45,8 +45,7 @@ Be aware that it is necessary to first convert the output to the rdf format in o
    5. ag_repo: name of the repository in AllegroGraph to which the rdf needs to be sent
    
    The last 4 requirements are not needed if the user does not want to utilise the AllegroGraph connection
-3. Create a folder named 'output' in the root of the project (same level as python files), otherwise, no metadata can be exported
-4. Run app.py, open the web link and fill in the required information:
+3. Run app.py, open the web link and fill in the required information:
    1. Event name: Give a name to the event that you want to analyse, this could be anything and is just for naming purposes. Example: Violence on civilians
    2. Date: Give the date on which the event happened. Example: 1-8-2024
    3. Country: Give the country name where the event happened. Example: Sudan
