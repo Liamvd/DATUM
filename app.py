@@ -3,6 +3,7 @@ from llm import run_llm, export_xml, export_csv, export_rdf
 import os
 from dotenv import load_dotenv
 import subprocess
+import xml.etree.ElementTree as ET
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
@@ -60,10 +61,34 @@ def send_to_allegrograph():
     rdf_file_path = 'output/metadata.rdf'
 
     if not os.path.exists(rdf_file_path):
-        flash("Error: RDF file 'metadata.rdf' not found in 'output' directory.", "warning")
+        flash("Error: RDF file 'metadata.rdf' not found in 'output' directory. Generate RDF first.", "warning")
         return render_template('result.html', data=session.get('data'), parsed_results=session.get('parsed_results'))
 
     try:
+        event_name = session.get('data', {}).get('eventName')
+        tree = ET.parse(rdf_file_path)
+        root = tree.getroot()
+        namespaces = {'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'}
+        description = root.find('rdf:Description', namespaces)
+
+        if description is not None:
+            rdf_about = description.attrib.get('{http://www.w3.org/1999/02/22-rdf-syntax-ns#}about', '')
+            if rdf_about.startswith("http://example.org/ontology/"):
+                current_event_name = rdf_about[len("http://example.org/ontology/"):]
+                current_event_name = current_event_name.replace('_', ' ')
+            else:
+                flash("Error: Incorrect RDF file. Unexpected URL format in rdf:about attribute.", "warning")
+                return render_template('result.html', data=session.get('data'),
+                                       parsed_results=session.get('parsed_results'))
+        else:
+            flash("Error: Incorrect RDF file. No rdf:Description element found.", "warning")
+            return render_template('result.html', data=session.get('data'),
+                                   parsed_results=session.get('parsed_results'))
+        if event_name != current_event_name:
+            flash("Error: Current RDF is not generated yet. Generate RDF first.", "warning")
+            return render_template('result.html', data=session.get('data'),
+                                   parsed_results=session.get('parsed_results'))
+
         result = subprocess.run(['python', 'allegrograph.py'], capture_output=True, text=True)
 
         if result.returncode == 0:

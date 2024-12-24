@@ -36,10 +36,11 @@ def promptRequest(df_ontologies, model, source):
                                                           'properties, provide a true or false based on whether the ' \
                                                           'source is related to that property: ' + str(
         df_ontologies.parse('All')['Description']) + 'Your response should only consist of the following structure: ' \
-                                                     'Event name: Event name, Label name 1: True/False, Label name ' \
-                                                     '2: True/False, etc. For example: Event name: Reports of rape ' \
-                                                     'of German women, Civilian Victims: True, Adbuction: False, ' \
-                                                     'etc.'
+                                                     'Event name: Event name; Label name 1: True/False; Label name ' \
+                                                     '2: True/False; etc. For example: Event name: Reports of rape ' \
+                                                     'of German women; Civilian Victims: True; Adbuction: False; ' \
+                                                     'etc. Make sure to not include the ";" symbol in the Event name ' \
+                                                     'value'
 
     response = model.generate_content(prompt)
     return response.text
@@ -49,7 +50,7 @@ def promptRequest(df_ontologies, model, source):
 def parseMetadata(results, data):
     parsed_results = {}
     csv_list = []
-    results_list = results.split(',')
+    results_list = results.split(';')
     count = 0
     g = Graph()
     BASE = Namespace('http://example.org/ontology/') # Should be configured with own ontology usage
@@ -58,7 +59,6 @@ def parseMetadata(results, data):
     # Clean up the results (to remove curly braces and split into properties)
     for i in results_list:
         i = i.strip()
-
         # Handle the first result to initialize the root element and metadata.
         if count == 0:
             # Initialize basic metadata (Event name, Country, Region, etc.)
