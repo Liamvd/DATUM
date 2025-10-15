@@ -1,203 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flask JSON Converter</title>
-    <link rel="stylesheet" href="/templates/style.css">
-    <style>
-        /* General reset for margin and padding */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-/* Fullscreen container */
-body, html {
-    height: 100%;
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #6a11cb, #2575fc);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Centered content box */
-.centered-container {
-    text-align: center;
-    background: rgba(255,255,255, 0.5);
-    border-radius: 15px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    padding: 30px;
-    width: 90%;
-    animation: fadeIn 1.5s ease-in-out;
-}
-
-/* Content styling */
-.content h1 {
-    font-size: 2rem;
-    color: #333;
-    margin-bottom: 10px;
-}
-
-.content p {
-    font-size: 1rem;
-    color: #666;
-    margin-bottom: 20px;
-    line-height: 1.5;
-}
-
-/* Button styling */
-.action-button {
-    background: linear-gradient(135deg, #2575fc, #6a11cb);
-    color: white;
-    border: none;
-    padding: 12px 25px;
-    font-size: 1rem;
-    font-weight: bold;
-    border-radius: 30px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    text-transform: uppercase;
-}
-
-.action-button:hover {
-    background: linear-gradient(135deg, #6a11cb, #2575fc);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-    transform: translateY(-2px);
-}
-
-.action-button:active {
-    background: linear-gradient(135deg, #0056b3, #3b5998);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transform: translateY(2px);
-}
-
-/* Button container */
-.button-container {
-    display: flex;
-    justify-content: center;
-    gap: 15px; /* Space between buttons */
-    margin-top: 20px;
-}
-
-/* Fade-in animation */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.flash-messages {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 9999;
-    width: 80%;
-    max-width: 500px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    pointer-events: none; /* Allow clicks to pass through */
-}
-
-.alert {
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    font-family: Arial, sans-serif;
-    text-align: center;
-    opacity: 0.95;
-    pointer-events: auto; /* Allow interaction with the message */
-}
-
-.alert-success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
-
-.alert-danger {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
-
-.alert-warning {
-    background-color: #fff3cd;
-    color: #856404;
-    border: 1px solid #ffeeba;
-}
-
-/* Add fade-in/out animations */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 0.95;
-        transform: translateY(0);
-    }
-}
-
-@keyframes fadeOut {
-    from {
-        opacity: 0.95;
-    }
-    to {
-        opacity: 0;
-    }
-}
-
-.flash-messages .alert {
-    animation: fadeIn 0.5s ease, fadeOut 0.5s ease 4.5s;
-}
-    </style>
-
+    <title>Homepage</title>
+    <link rel="stylesheet" href="static/style.css">
 </head>
+
 <body>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <div class="flash-messages">
-          {% for category, message in messages %}
-            <div class="alert alert-{{ category }}">{{ message }}</div>
-          {% endfor %}
-        </div>
-      {% endif %}
-    {% endwith %}
+    <header>
+        <h1><a href="{{ url_for('index') }}">DATUM</a></h1>
+        <nav>
+            <ul class="header-nav">
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('communication') }}">Communication</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
 
     <div class="centered-container">
         <div class="content">
-            <h1>Situation Report Properties</h1>
-            <form method="POST" action="/">
-            <label for="eventName">Event Name:</label><br>
-            <input type="text" id="eventName" name="Event Name" required><br><br>
-            
-            <label for="date">Date:</label><br>
-            <input type="date" id="date" name="Date" required><br><br>
-            
-            <label for="country">Country:</label><br>
-            <input type="text" id="country" name="Country" required><br><br>
-
-            <label for="region">Region:</label><br>
-            <input type="text" id="region" name="Region" required><br><br>
-            
-            <label for="situation">Situation:</label><br>
-            <input type="textarea" id="situation" name="Situation" required><br><br>
-                    
-            <button type="submit">Submit</button>
+            <button id="back" class="hidden">&larr; Go Back</button>
+            <div id="form-portal" class="visible">
+                <h1>Data Annotation, Transformation, and Unified Mapping</h1>
+                <p>Welcome to DATUM, the tool to transform your data into the format that you prefer. Upload your data,
+                choose the format that you want and generate the results. When you get your desired results, export the data
+                or send it to a data capture tool of your choosing.</p>
+                <div class="button-group">
+                    <button id="startUpload" class="action-button">Get started</button>
+                </div>
+            </div>
+            <div id="uploadDiv" class="hidden">
+                <div>
+                    <h1>Data upload</h1>
+                    <p>Choose with data to upload. Data can be uploaded through: 1. Choosing a local file, 2. Submitting
+                        a link, 3. Pasting plain text. Multiple datasets can be uploaded at once, so add as many as you
+                        prefer. Once all the data has been inputted, click the 'Upload' button.</p>
+                    <div class="rowDiv">
+                        <div class="uploadBox">
+                            <div class="uploadHeader">
+                                <button class="collapse-btn" aria-expanded="false" aria-label="Expand/Collapse">&#9654;</button>
+                                <label class="uploadLabel" for="fileInput">Upload a file:</label>
+                            </div>
+                            <div class="uploadContent">
+                                <input type="file" id="fileInput"><br>
+                            </div>
+                        </div>
+                        <div class="uploadBox">
+                            <div class="uploadHeader">
+                                <button class="collapse-btn" aria-expanded="false" aria-label="Expand/Collapse">&#9654;</button>
+                                <label class="uploadLabel" for="urlInput">Enter a URL:</label>
+                                </div>
+                            <div class="uploadContent">
+                                <input type="url" id="urlInput" placeholder="https://example.com"><br>
+                            </div>
+                        </div>
+                        <div class="uploadBox">
+                            <div class="uploadHeader">
+                                <button class="collapse-btn" aria-expanded="false" aria-label="Expand/Collapse">&#9654;</button>
+                                <label class="uploadLabel" for="plaintextInput">Enter text:</label>
+                            </div>
+                            <div class="uploadContent">
+                                <textarea id="plaintextInput" placeholder="Example..."></textarea><br>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="button-group">
+                        <button class="action-button" onclick="uploadData()">Upload</button>
+                    </div>
+                </div>
+            </div>
+            <div id="transformedData" class="hidden">
+                <h1>Data transformed</h1>
+                <div>
+                    <div>
+                        <h2>Uploaded data:</h2>
+                        <div id="originalData" class="centered-container"></div>
+                    </div>
+                    <div>
+                        <h2>Transformed data:</h2>
+                        <div id="rdfData"></div>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button class="action-button" onclick="addMetadata()">Next step</button>
+                </div>
+            </div>
+            <div id="metadataDiv" class="hidden">
+                <h1>Add metadata</h1>
+                <p>If desired, metadata can be added to the transformed data. The metadata can be uploaded or added manually or generated automatically. If you wish to skip this step, click the 'Next step' button below to proceed without adding metadata.</p>
+                <div class="button-group">
+                    <button class="action-button" onclick="exportData()">Next step</button>
+                </div>
+            </div>
+            <div id="exportDiv" class="hidden">
+                <h1>Export data</h1>
+                <div>
+                    <p>Final data:</p>
+                </div>
+                <p>Choose where to export the final data to:</p>
+                <div class="button-group">
+                    <button class="action-button" onclick="exportAllegrograph()">AllegroGraph</button>
+                </div>
+                <p>Once all data has been exported, click the 'Start again' button below if you want to repeat the process with another dataset.</p>
+                <div class="button-group">
+                    <button class="action-button" onclick="startOver()">Start again</button>
+                </div>
+            </div>
         </div>
     </div>
-
-    </form>
+<script src="static/index_script.js"></script>
 </body>
 </html>
